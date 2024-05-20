@@ -1,10 +1,19 @@
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { signOut } from "../../lib/appwrite";
+import { router } from "expo-router";
 
 export default function Home() {
+  const handleSignOut = () => {
+    signOut();
+    router.replace("/");
+  };
+
   return (
-    <View>
+    <SafeAreaView>
       <Text>Home</Text>
-    </View>
+      <Button title="Sign Out" onPress={handleSignOut} />
+    </SafeAreaView>
   );
 }
