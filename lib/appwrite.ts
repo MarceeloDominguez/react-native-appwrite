@@ -115,3 +115,23 @@ export async function getCurrentUser() {
     console.log(error);
   }
 }
+
+export const getAllPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId
+    );
+
+    return posts.documents.map((doc) => ({
+      title: doc.title,
+      video: doc.video,
+      thumbnail: doc.thumbnail,
+      prompt: doc.prompt,
+      $id: doc.$id,
+      creator: doc.creator,
+    }));
+  } catch (error) {
+    throw new Error(error);
+  }
+};

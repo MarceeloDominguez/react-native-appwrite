@@ -2,10 +2,12 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   KeyboardTypeOptions,
   ViewStyle,
+  TextInput,
 } from "react-native";
+import React from "react";
+import { Feather } from "@expo/vector-icons";
 
 type Props = {
   label: string;
@@ -17,7 +19,7 @@ type Props = {
   containerStyles?: ViewStyle;
 };
 
-export default function FormField({
+export default function SearchInput({
   label,
   placeholder,
   value,
@@ -39,6 +41,16 @@ export default function FormField({
           keyboardType={keyboardType}
           secureTextEntry={secureTextEntry}
         />
+        <Feather
+          name="search"
+          size={25}
+          color="#7b7b8b"
+          style={{
+            position: "absolute",
+            right: 10,
+            bottom: 10,
+          }}
+        />
       </View>
     </View>
   );
@@ -58,5 +70,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     color: "#fff",
     fontFamily: "PoppinsMedium",
+    paddingRight: 50,
   },
 });
