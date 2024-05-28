@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { MyData } from "../../lib/useAppwrite";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { ResizeMode, Video } from "expo-av";
 
 type Props = {
   video: MyData;
@@ -11,7 +12,7 @@ type Props = {
 export default function VideoCard({ video }: Props) {
   const [play, setPlay] = useState(false);
   const { avatar, username } = video.creator;
-  const { title, thumbnail } = video;
+  const { title, thumbnail, video: IVideo } = video;
 
   return (
     <View style={styles.container}>
@@ -30,7 +31,22 @@ export default function VideoCard({ video }: Props) {
         <Entypo name="dots-three-vertical" size={15} color="gray" />
       </View>
       {play ? (
-        <Text>Playing</Text>
+        <Video
+          source={{ uri: IVideo }}
+          resizeMode={ResizeMode.CONTAIN}
+          useNativeControls
+          shouldPlay
+          onPlaybackStatusUpdate={(status) => {
+            if ("didJustFinish" in status && status.didJustFinish) {
+              setPlay(false);
+            }
+          }}
+          style={{
+            width: "100%",
+            height: 210,
+            borderRadius: 12,
+          }}
+        />
       ) : (
         <TouchableOpacity
           style={styles.containerThumbnail}
@@ -95,9 +111,6 @@ const styles = StyleSheet.create({
   },
   iconPlay: {
     position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
     alignSelf: "center",
     bottom: 80,
   },

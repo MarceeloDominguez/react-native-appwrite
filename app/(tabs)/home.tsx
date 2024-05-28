@@ -1,22 +1,18 @@
-import {
-  View,
-  Text,
-  Button,
-  FlatList,
-  StyleSheet,
-  RefreshControl,
-} from "react-native";
+import { View, Text, FlatList, StyleSheet, RefreshControl } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getAllPosts, signOut } from "../../lib/appwrite";
-import { router } from "expo-router";
+import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import SearchInput from "../components/SearchInput";
 import Trending from "../components/Trending";
 import EmptyState from "../components/EmptyState";
-import useAppwrite from "../../lib/useAppwrite";
+import useAppwrite, { MyData } from "../../lib/useAppwrite";
 import VideoCard from "../components/VideoCard";
 
-const HeaderComponent = () => {
+type HeaderComponentProps = {
+  latestPosts: MyData[];
+};
+
+const HeaderComponent = ({ latestPosts }: HeaderComponentProps) => {
   return (
     <View style={styles.containerHeader}>
       <Text style={styles.titleHeader}>Welcome Back</Text>
@@ -31,17 +27,16 @@ const HeaderComponent = () => {
         >
           Latest Videos
         </Text>
-        <Trending />
+        <Trending latestPosts={latestPosts} />
       </View>
     </View>
   );
 };
 
-//posts ?? [] trending
-
 export default function Home() {
   const [refreshing, setRefreshing] = useState(false);
   const { data: posts, refetch, isLoading } = useAppwrite(getAllPosts);
+  const { data: latestPosts } = useAppwrite(getLatestPosts);
 
   if (isLoading)
     return (
@@ -68,7 +63,7 @@ export default function Home() {
         data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <VideoCard video={item} />}
-        ListHeaderComponent={() => HeaderComponent()}
+        ListHeaderComponent={() => HeaderComponent({ latestPosts })}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
           <EmptyState
