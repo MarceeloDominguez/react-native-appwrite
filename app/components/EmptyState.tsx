@@ -22,7 +22,7 @@ export default function EmptyState({ title, subtitle }: Props) {
 
       <CustomButton
         title="Back to explore"
-        handlePress={() => router.push("/create")}
+        handlePress={() => router.push("/home")}
         containerStyles={{ marginVertical: 16 }}
       />
     </View>

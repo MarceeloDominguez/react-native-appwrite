@@ -17,16 +17,12 @@ const HeaderComponent = ({ latestPosts }: HeaderComponentProps) => {
     <View style={styles.containerHeader}>
       <Text style={styles.titleHeader}>Welcome Back</Text>
       <Text style={styles.subtitleHeader}>Marcelo Dominguez</Text>
-      {/* <SearchInput
+      <SearchInput
         placeholder="Search for a video topic"
-        containerStyles={{ marginBottom: 20 }}
-      /> */}
+        containerStyles={styles.containerStylesInput}
+      />
       <View>
-        <Text
-          style={{ color: "gray", fontFamily: "PoppinsMedium", fontSize: 14 }}
-        >
-          Latest Videos
-        </Text>
+        <Text style={styles.titleCarousel}>Latest Videos</Text>
         <Trending latestPosts={latestPosts} />
       </View>
     </View>
@@ -51,14 +47,8 @@ export default function Home() {
     setRefreshing(false);
   };
 
-  // const handleSignOut = () => {
-  //   signOut();
-  //   router.replace("/");
-  // };
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Button title="Sign Out" onPress={handleSignOut} /> */}
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
@@ -97,5 +87,14 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "PoppinsBold",
     fontSize: 24,
+  },
+  containerStylesInput: {
+    marginBottom: 20,
+    marginTop: 8,
+  },
+  titleCarousel: {
+    color: "gray",
+    fontFamily: "PoppinsMedium",
+    fontSize: 14,
   },
 });

@@ -156,3 +156,26 @@ export const getLatestPosts = async () => {
     throw new Error(error);
   }
 };
+
+export const searchPosts = async (query) => {
+  try {
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId,
+      [Query.search("title", query)]
+    );
+
+    if (!posts) throw new Error("Something went wrong");
+
+    return posts.documents.map((doc) => ({
+      title: doc.title,
+      video: doc.video,
+      thumbnail: doc.thumbnail,
+      prompt: doc.prompt,
+      $id: doc.$id,
+      creator: doc.creator,
+    }));
+  } catch (error) {
+    throw new Error(error);
+  }
+};

@@ -1,57 +1,59 @@
 import {
   View,
-  Text,
   StyleSheet,
-  KeyboardTypeOptions,
   ViewStyle,
   TextInput,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
+import { router, usePathname } from "expo-router";
 
 type Props = {
-  label: string;
-  value: string;
-  handleChangeText: (value: string) => void;
   placeholder: string;
-  keyboardType: KeyboardTypeOptions;
   secureTextEntry?: boolean;
   containerStyles?: ViewStyle;
+  initialQuery?: string;
 };
 
 export default function SearchInput({
-  label,
   placeholder,
-  value,
-  handleChangeText,
-  keyboardType,
   secureTextEntry = false,
   containerStyles,
+  initialQuery,
 }: Props) {
+  const pathname = usePathname();
+  const [query, setQuery] = useState(initialQuery || "");
+
   return (
     <View style={StyleSheet.flatten([containerStyles])}>
-      <Text style={styles.label}>{label}</Text>
-      <View>
-        <TextInput
-          placeholder={placeholder}
-          placeholderTextColor="#7b7b8b"
-          style={styles.textInput}
-          value={value}
-          onChangeText={handleChangeText}
-          keyboardType={keyboardType}
-          secureTextEntry={secureTextEntry}
-        />
-        <Feather
-          name="search"
-          size={25}
-          color="#7b7b8b"
-          style={{
-            position: "absolute",
-            right: 10,
-            bottom: 10,
-          }}
-        />
-      </View>
+      <TextInput
+        placeholder={placeholder}
+        placeholderTextColor="#7b7b8b"
+        style={styles.textInput}
+        value={query}
+        onChangeText={(e) => setQuery(e)}
+        keyboardType="default"
+        secureTextEntry={secureTextEntry}
+      />
+      <TouchableOpacity
+        style={styles.containerIconSearch}
+        activeOpacity={0.7}
+        onPress={() => {
+          if (!query) {
+            return Alert.alert(
+              "Missing query",
+              "Please input something to search results across detabase"
+            );
+          }
+
+          if (pathname.startsWith("/search")) router.setParams({ query });
+          else router.push(`/search/${query}`);
+        }}
+      >
+        <Feather name="search" size={25} color="#7b7b8b" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -67,9 +69,17 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 6,
     paddingHorizontal: 10,
-    marginTop: 4,
     color: "#fff",
     fontFamily: "PoppinsMedium",
     paddingRight: 50,
+  },
+  containerIconSearch: {
+    height: 45,
+    width: 45,
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    right: 0,
+    borderRadius: 6,
   },
 });
