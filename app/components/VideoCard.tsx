@@ -41,11 +41,7 @@ export default function VideoCard({ video }: Props) {
               setPlay(false);
             }
           }}
-          style={{
-            width: "100%",
-            height: 210,
-            borderRadius: 12,
-          }}
+          style={styles.videoCard}
         />
       ) : (
         <TouchableOpacity
@@ -113,5 +109,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignSelf: "center",
     bottom: 80,
+  },
+  videoCard: {
+    width: "100%",
+    height: 210,
+    borderRadius: 12,
+    marginTop: 14,
   },
 });

@@ -7,12 +7,20 @@ import React, {
 } from "react";
 import { getCurrentUser } from "../lib/appwrite";
 
+interface User {
+  username: string;
+  avatar: string;
+  email: string;
+  $id: string;
+}
+
 type ContextProps = {
   isLoggedIn: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  user: null;
-  setUser: React.Dispatch<React.SetStateAction<null>>;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
 };
 
 const GlobalContext = createContext({} as ContextProps);
@@ -49,6 +57,7 @@ export const GlobalProvider = ({ children }: PropsWithChildren) => {
         user,
         setUser,
         isLoading,
+        setIsLoggedIn,
       }}
     >
       {children}

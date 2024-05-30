@@ -7,16 +7,18 @@ import Trending from "../components/Trending";
 import EmptyState from "../components/EmptyState";
 import useAppwrite, { MyData } from "../../lib/useAppwrite";
 import VideoCard from "../components/VideoCard";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 type HeaderComponentProps = {
   latestPosts: MyData[];
+  username: string;
 };
 
-const HeaderComponent = ({ latestPosts }: HeaderComponentProps) => {
+const HeaderComponent = ({ latestPosts, username }: HeaderComponentProps) => {
   return (
     <View style={styles.containerHeader}>
       <Text style={styles.titleHeader}>Welcome Back</Text>
-      <Text style={styles.subtitleHeader}>Marcelo Dominguez</Text>
+      <Text style={styles.subtitleHeader}>{username}</Text>
       <SearchInput
         placeholder="Search for a video topic"
         containerStyles={styles.containerStylesInput}
@@ -30,6 +32,7 @@ const HeaderComponent = ({ latestPosts }: HeaderComponentProps) => {
 };
 
 export default function Home() {
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
   const { data: posts, refetch, isLoading } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
@@ -53,7 +56,12 @@ export default function Home() {
         data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <VideoCard video={item} />}
-        ListHeaderComponent={() => HeaderComponent({ latestPosts })}
+        ListHeaderComponent={() => (
+          <HeaderComponent
+            latestPosts={latestPosts}
+            username={user?.username}
+          />
+        )}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
           <EmptyState
@@ -87,6 +95,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "PoppinsBold",
     fontSize: 24,
+    textTransform: "capitalize",
   },
   containerStylesInput: {
     marginBottom: 20,

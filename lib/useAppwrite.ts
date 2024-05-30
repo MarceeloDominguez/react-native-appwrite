@@ -5,6 +5,7 @@ type Creator = {
   username: string;
   avatar: string;
   email: string;
+  $id: string;
 };
 
 export type MyData = {

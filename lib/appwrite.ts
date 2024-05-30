@@ -110,7 +110,18 @@ export async function getCurrentUser() {
 
     if (!currentUser) throw Error;
 
-    return currentUser.documents[0];
+    //return currentUser.documents[0];
+    const userDoc = currentUser.documents[0];
+
+    // Transforma el documento a un objeto de tipo User
+    const user = {
+      username: userDoc.username,
+      avatar: userDoc.avatar,
+      email: userDoc.email,
+      $id: userDoc.$id,
+    };
+
+    return user;
   } catch (error) {
     console.log(error);
   }
@@ -166,6 +177,27 @@ export const searchPosts = async (query) => {
     );
 
     if (!posts) throw new Error("Something went wrong");
+
+    return posts.documents.map((doc) => ({
+      title: doc.title,
+      video: doc.video,
+      thumbnail: doc.thumbnail,
+      prompt: doc.prompt,
+      $id: doc.$id,
+      creator: doc.creator,
+    }));
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getUserPosts = async (userId) => {
+  try {
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId,
+      [Query.equal("creator", userId)]
+    );
 
     return posts.documents.map((doc) => ({
       title: doc.title,
