@@ -8,6 +8,7 @@ import EmptyState from "../components/EmptyState";
 import useAppwrite, { MyData } from "../../lib/useAppwrite";
 import VideoCard from "../components/VideoCard";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import Loading from "../components/Loading";
 
 type HeaderComponentProps = {
   latestPosts: MyData[];
@@ -37,12 +38,7 @@ export default function Home() {
   const { data: posts, refetch, isLoading } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
 
-  if (isLoading)
-    return (
-      <View style={{ backgroundColor: "orange", flex: 1 }}>
-        <Text style={{ color: "red" }}>Loading...</Text>
-      </View>
-    );
+  if (isLoading) return <Loading />;
 
   const onRefresh = async () => {
     setRefreshing(true);

@@ -199,7 +199,7 @@ export const getUserPosts = async (userId) => {
     const posts = await databases.listDocuments(
       config.databaseId,
       config.videoCollectionId,
-      [Query.equal("creator", userId)]
+      [Query.equal("creator", userId), Query.orderDesc("$createdAt")]
     );
 
     return posts.documents.map((doc) => ({

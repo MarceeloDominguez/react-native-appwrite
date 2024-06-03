@@ -16,6 +16,7 @@ import VideoCard from "../components/VideoCard";
 import { MaterialIcons } from "@expo/vector-icons";
 import InfoBox from "../components/InfoBox";
 import { router } from "expo-router";
+import Loading from "../components/Loading";
 
 type PropsHeaderComponent = {
   avatar: string;
@@ -69,12 +70,7 @@ export default function Profile() {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const { data: posts, isLoading } = useAppwrite(() => getUserPosts(user.$id));
 
-  if (isLoading)
-    return (
-      <View style={{ backgroundColor: "gray", flex: 1 }}>
-        <Text style={{ color: "red" }}>Loading...</Text>
-      </View>
-    );
+  if (isLoading) return <Loading />;
 
   const logout = async () => {
     await signOut();

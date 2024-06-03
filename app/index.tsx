@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "./components/CustomButton";
 import { StatusBar } from "expo-status-bar";
 import { useGlobalContext } from "../context/GlobalProvider";
+import Loading from "./components/Loading";
 
 const { height: HEIGHT_SCREEN } = Dimensions.get("screen");
 
@@ -19,12 +20,7 @@ export default function App() {
 
   if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
-  if (isLoading)
-    return (
-      <View style={{ backgroundColor: "violet", flex: 1 }}>
-        <Text style={{ color: "red" }}>Loading...</Text>
-      </View>
-    );
+  if (isLoading) return <Loading />;
 
   return (
     <SafeAreaView style={styles.container}>
